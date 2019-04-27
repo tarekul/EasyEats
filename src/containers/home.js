@@ -4,7 +4,7 @@ class Home extends Component{
     render(){
         return <>
             <div class='container mt-5 jumbotron'>
-                <h3>EasyEats</h3>
+                <h3>EasyEatss</h3>
             </div>
         </>
     }
