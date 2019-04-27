@@ -1,14 +1,7 @@
-import React, {Component} from 'react'
-
-class GenerationPage extends Component{
-    render(){
-        return <h1>GenerationPage</h1>
-    }
-}
-
 import React, { Component } from 'react';
 import List from '../components/restList';
 import axios from 'axios';
+import queryString from 'query-string';
 
 class GenerationPage extends Component {
     constructor(props) {
@@ -40,7 +33,7 @@ class GenerationPage extends Component {
     getOptions = (query) => {
         axios({
             method: 'get',
-            url: 'https://api.yelp.com/v3/businesses/search',
+            url: 'https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=40.7429098&longitude=-73.9418147',
             params: {
                 maxResults: 4,
                 key: '7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx',
@@ -48,6 +41,13 @@ class GenerationPage extends Component {
 
             }
         })
+    }
+
+    componentDidMount(){
+        console.log('location',this.props.location.search)
+        const values = queryString.parse(this.props.location.search)
+        console.log('lat',values.lat)
+        console.log('lon',values.lon)
     }
 
 
