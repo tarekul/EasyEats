@@ -1,10 +1,7 @@
 import React, {Component} from 'react';
 import {Route, Switch} from 'react-router-dom'
 
-import Home from './containers/Home'
-import InfoForm from './containers/InfoForm'
-import GenerationPage from './containers/GenerationPage'
-import PollPage from './containers/PollPage'
+import { Home, GenerationPage, InfoForm, PollPage } from './containers/'
 
 class App extends Component{
   render(){
