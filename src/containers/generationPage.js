@@ -8,6 +8,8 @@ class GenerationPage extends Component {
         super(props)
 
         this.state = {
+            lat:null,
+            lon:null,
             restaurant: [
                 {
                     name: '',
@@ -30,24 +32,27 @@ class GenerationPage extends Component {
     }
 
 
-    getOptions = (query) => {
+    getOptions = () => {
         axios({
-            method: 'get',
-            url: 'https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=40.7429098&longitude=-73.9418147',
-            params: {
-                maxResults: 4,
-                key: '7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx',
-                location: '',
-
-            }
+            method: 'GET',
+            url: `https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=${this.state.lat}&longitude=${this.state.lon}`,
+            headers:{
+               Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
+           }
         })
+        .then(res => console.log('res', res.data))
     }
 
     componentDidMount(){
+        const {lat , lon} = this.state
         console.log('location',this.props.location.search)
         const values = queryString.parse(this.props.location.search)
         console.log('lat',values.lat)
         console.log('lon',values.lon)
+        this.setState({lat: values.lat, lon: values.lon},()=>{
+         this.getOptions()   
+        })
+        
     }
 
 
