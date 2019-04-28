@@ -19,13 +19,13 @@ class GenerationPage extends Component {
     }
 
     handleClick = name => e => {
-        switch(name){
+        switch (name) {
             case 'regen':
-            this.generateRandomRestaurantList();
-            break;
+                this.generateRandomRestaurantList();
+                break;
 
             default:
-            return; 
+                return;
         }
 
     };
@@ -136,16 +136,19 @@ class GenerationPage extends Component {
 
     render() {
         const { display } = this.state
-        console.log('Display: ', display)
         return (
 
             <>
                 <div className='container'>
-                        {
-                            display.map((e, i) => {
-                                return <List {...e} key={i} />
-                            })
-                        }
+                    {
+                        display.map((e, i) => {
+                            return (
+                                <div className='my-1' key={i}>
+                                    <List {...e}  />
+                                </div>
+                            )
+                        })
+                    }
                     <div className='container row my-1' >
                         <div className='col-sm-12 my-1'>
                             <button type='button' className="btn btn-outline-info" onClick={this.handleClick('regen')} style={{ width: '100%' }} >Generate New List</button>
