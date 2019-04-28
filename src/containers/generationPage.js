@@ -59,6 +59,7 @@ class GenerationPage extends Component {
         switch (name) {
             case 'votes':
                 this.setState({ [name]: e.target.value })
+                break;
             default:
                 return;
         };
