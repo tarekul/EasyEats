@@ -56,16 +56,18 @@ class Home extends Component{
           background={'teal'}
         />
 
-            <div className='container mt-5 jumbotron'>
-            <div className='image'>
-                <img src={logo}/>
+            <div className='container mt-5'>
+            <div className ='row justify-content-md-center'>
+            <div className='col-md-12 row justify-content-md-center'>
+                <img className='col col-md-auto' src={logo}/>
             </div>
                 {/* <h2 style={{textAlign:'center'}}>EasyEats</h2> */}
-                <div style={{textAlign:'center'}}>
-                    <span style={{marginRight:'1%'}}><Button goTo='/' value='My Location' handleOnClick={e=>{this.geo()}}/></span>
-                    <Button goTo='/infopage' value='Enter Location' />
+                <div className='col-md-12 row justify-content-md-center m-2'>
+                    <span style={{marginRight:'1%'}}><Button className='col col-md-6'goTo='/' value='My Location' handleOnClick={e=>{this.geo()}}/></span>
+                    <Button className='col col-md-6' goTo='/infopage' value='Enter Location' />
                 </div>
                 {(!this.state) ? (<div className="d-flex justify-content-center mt-5 pt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>): <></>}
+            </div>
             </div>
             {/* <div>
                 <iframe src="https://giphy.com/embed/3oEjHLS6Va8qdALZCM" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
