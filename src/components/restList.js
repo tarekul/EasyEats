@@ -1,7 +1,7 @@
 import React from 'react';
 
 const List = (props) => {
-    const { categories, display_phone, image_url, menu_url, name, phone, price, } = props;
+    const { categories, image_url, menu_url, name, price, } = props;
     return (
         <>
             <div className='row container' >
@@ -12,7 +12,7 @@ const List = (props) => {
                     <li className="list-group-item">
                         <div className='row justify-content-between'>
                             <span className='col h4'>{name}</span>
-                            <a href={menu_url} target='_blank' className='col-sm-2'>Menu</a>
+                            <a href={menu_url} target='_blank' className='col-sm-2' rel="noopener noreferrer">Menu</a>
                         </div>
                     </li>
                     <li className="list-group-item">
