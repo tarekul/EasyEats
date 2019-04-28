@@ -1,7 +1,9 @@
 import React from 'react';
 import '../components/infoform.css'
-import logo from '../components/logo.jpg';
+
 import Sky from 'react-sky';
+
+import InputField from '../components/InputField'
 
 
 
@@ -46,44 +48,8 @@ class InfoForm extends React.Component {
                     size={'90px'}
                     background={'white'}
                 />
-                <div className='mt-5 pt-5'>
-                    <form >
-                        <div className='image'  >
-                            <img src={logo} alt='logo' />
-                        </div>
-                        <div className='row justify-content-center'> 
-                            <div className='col ml-4 col-sm-8 col-md-5' style={{ background: 'red' }}>
-                                <div className="form-group">
-                                    <label for="inputAddress">Address</label>
-                                    <input type="text" onChange={e => this.handleInputChange(e)} name="address" className="form-control" id="validationCustom01" placeholder="1234 Main St" />
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-group col-md-6">
-                                        <label for="inputCity">City</label>
-                                        <input type="text" onChange={e => this.handleInputChange(e)} name="city" className="form-control" id="inputCity" />
-                                    </div>
-                                    <div className="form-group col-md-4">
-                                        <label for="inputState">State</label>
-                                        <select id="inputState" onChange={e => this.handleInputChange(e)} name="state" class="form-control">
-                                            <option selected>Choose...</option>
-                                            {
-                                                states.map((e, i) => {
-                                                    return (<option key={i} value={e}>{e}</option>)
-                                                })
-                                            }
-                                        </select>
-                                    </div>
-                                    <div className="form-group col-md-2">
-                                        <label for="inputZip">Zip</label>
-                                        <input type="text" onChange={e => this.handleInputChange(e)} name="zip" className="form-control" id="inputZip" />
-                                    </div>
-                                </div>
-                                <button type="submit" className="btn btn-info" onClick={this.handleOnClick}>Enter</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-
+                
+                <InputField handleInputChange={this.handleInputChange} handleOnClick={this.handleOnClick} states={states} />
             </>
         )
     }
