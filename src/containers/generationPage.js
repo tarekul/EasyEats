@@ -3,6 +3,7 @@ import List from '../components/restList';
 import { parseYelpData, selectRandom } from '../services/services';
 import axios from 'axios';
 import queryString from 'query-string';
+import firebase from '../services/firebase';
 
 class GenerationPage extends Component {
     constructor(props) {
@@ -19,9 +20,13 @@ class GenerationPage extends Component {
     }
 
     handleClick = name => e => {
+        console.log('here')
         switch (name) {
             case 'regen':
                 this.generateRandomRestaurantList();
+                break;
+            case 'create':
+                this.generatePoll();
                 break;
 
             default:
@@ -82,8 +87,19 @@ class GenerationPage extends Component {
         }
     }
 
-    pageLoad() {
+    generatePoll() {
+        const { display } = this.state;
+        const id = display.reduce( (acc, e, i) => {
+            const int = Math.floor(Math.random() * display[i].name.length)
+            acc += display[i].name[1]+display[i].name[0]+display[i].name[int]
+            return acc;
+        }, '').replace(/[^a-zA-Z0-9]/g, "ee")
+        console.log(id)
+        // const firebaseRef = firebase.database().ref();
+        // firebaseRef.child('')
+    };
 
+    pageLoad() {
         const values = queryString.parse(this.props.location.search)
         if (!values.lat || !values.lon) {
             const temp = this.props.location.search.split('=')[1];
@@ -144,7 +160,7 @@ class GenerationPage extends Component {
                         display.map((e, i) => {
                             return (
                                 <div className='my-1' key={i}>
-                                    <List {...e}  />
+                                    <List {...e} />
                                 </div>
                             )
                         })
@@ -154,7 +170,7 @@ class GenerationPage extends Component {
                             <button type='button' className="btn btn-outline-info" onClick={this.handleClick('regen')} style={{ width: '100%' }} >Generate New List</button>
                         </div>
                         <div className='col-sm-12 my-1'>
-                            <button type='button' className="btn btn-outline-info" style={{ width: '100%' }}>Create Poll</button>
+                            <button type='button' className="btn btn-outline-info" style={{ width: '100%' }} onClick={this.handleClick('create')} >Create Poll</button>
                         </div>
                     </div>
                 </div>
