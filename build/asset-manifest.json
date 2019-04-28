@@ -1,18 +1,18 @@
 {
   "files": {
-    "main.css": "/static/css/main.ff8feb79.chunk.css",
-    "main.js": "/static/js/main.c51ec1b7.chunk.js",
-    "main.js.map": "/static/js/main.c51ec1b7.chunk.js.map",
-    "runtime~main.js": "/static/js/runtime~main.a8a9905a.js",
-    "runtime~main.js.map": "/static/js/runtime~main.a8a9905a.js.map",
-    "static/css/2.266e55a5.chunk.css": "/static/css/2.266e55a5.chunk.css",
-    "static/js/2.1818e462.chunk.js": "/static/js/2.1818e462.chunk.js",
-    "static/js/2.1818e462.chunk.js.map": "/static/js/2.1818e462.chunk.js.map",
-    "index.html": "/index.html",
-    "precache-manifest.bc523709c6c3e7bbdb58ff306d21b71f.js": "/precache-manifest.bc523709c6c3e7bbdb58ff306d21b71f.js",
-    "service-worker.js": "/service-worker.js",
-    "static/css/2.266e55a5.chunk.css.map": "/static/css/2.266e55a5.chunk.css.map",
-    "static/css/main.ff8feb79.chunk.css.map": "/static/css/main.ff8feb79.chunk.css.map",
-    "static/media/logo.jpg": "/static/media/logo.adb37c85.jpg"
+    "main.css": "/EasyEats/static/css/main.ff8feb79.chunk.css",
+    "main.js": "/EasyEats/static/js/main.92b282b6.chunk.js",
+    "main.js.map": "/EasyEats/static/js/main.92b282b6.chunk.js.map",
+    "runtime~main.js": "/EasyEats/static/js/runtime~main.89bd9bab.js",
+    "runtime~main.js.map": "/EasyEats/static/js/runtime~main.89bd9bab.js.map",
+    "static/css/2.266e55a5.chunk.css": "/EasyEats/static/css/2.266e55a5.chunk.css",
+    "static/js/2.43169c48.chunk.js": "/EasyEats/static/js/2.43169c48.chunk.js",
+    "static/js/2.43169c48.chunk.js.map": "/EasyEats/static/js/2.43169c48.chunk.js.map",
+    "index.html": "/EasyEats/index.html",
+    "precache-manifest.69c97bb8a50194eb48bd37b8a38ac815.js": "/EasyEats/precache-manifest.69c97bb8a50194eb48bd37b8a38ac815.js",
+    "service-worker.js": "/EasyEats/service-worker.js",
+    "static/css/2.266e55a5.chunk.css.map": "/EasyEats/static/css/2.266e55a5.chunk.css.map",
+    "static/css/main.ff8feb79.chunk.css.map": "/EasyEats/static/css/main.ff8feb79.chunk.css.map",
+    "static/media/logo.jpg": "/EasyEats/static/media/logo.adb37c85.jpg"
   }
 }
