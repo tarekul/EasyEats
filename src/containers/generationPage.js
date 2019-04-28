@@ -18,6 +18,18 @@ class GenerationPage extends Component {
         }
     }
 
+    handleClick = name => e => {
+        switch(name){
+            case 'regen':
+            this.generateRandomRestaurantList();
+            break;
+
+            default:
+            return; 
+        }
+
+    };
+
     getOptions = () => {
         axios({
             method: 'GET',
@@ -49,7 +61,6 @@ class GenerationPage extends Component {
 
     generateRandomRestaurantList = (passedIn = null) => {
         const restaurants = passedIn || this.state.restaurants;
-
         if (!restaurants) {
             this.setState({ redirect: true })
             return;
@@ -129,19 +140,19 @@ class GenerationPage extends Component {
         return (
 
             <>
-                <form>
-                    {
-                        display.map((e, i) => {
-                            return <List {...e} key={i}/>
-                        })
-                    }
-                </form>
-                <div className='container' style={{ marginTop: '40px', marginLeft: '50px' }}  >
-                    <div>
-                        <button type='button' class="btn btn-outline-info" >Generate New List</button>
-                    </div>
-                    <div style={{ marginTop: '20px' }}  >
-                        <button type='button' class="btn btn-outline-info" >Create Poll</button>
+                <div className='container'>
+                        {
+                            display.map((e, i) => {
+                                return <List {...e} key={i} />
+                            })
+                        }
+                    <div className='container row my-1' >
+                        <div className='col-sm-12 my-1'>
+                            <button type='button' className="btn btn-outline-info" onClick={this.handleClick('regen')} style={{ width: '100%' }} >Generate New List</button>
+                        </div>
+                        <div className='col-sm-12 my-1'>
+                            <button type='button' className="btn btn-outline-info" style={{ width: '100%' }}>Create Poll</button>
+                        </div>
                     </div>
                 </div>
 
