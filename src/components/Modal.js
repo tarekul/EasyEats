@@ -23,7 +23,7 @@ export default props => {
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={handleOnPollSubmit('modal')}>Create Poll</button>
+                            <button type="button" className="btn btn-primary" data-dismiss="modal" onClick={handleOnPollSubmit('modal')}>Go Vote</button>
                         </div>
                     </div>
                 </div>
