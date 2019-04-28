@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import Button from '../components/Button'
+import logo from '../components/logo.jpg'
 
 
 class Home extends Component{
@@ -40,8 +41,8 @@ class Home extends Component{
 
     render(){
         return <>
-            <div className='container mt-5 jumbotron'>
-                <h2 style={{textAlign:'center'}}>EasyEats</h2>
+            <div className='container mt-5'>
+                <div style={{textAlign:'center'}}><img src={logo} /></div>
                 <div style={{textAlign:'center'}}>
                     <span style={{marginRight:'1%'}}><Button goTo='/' value='My Location' handleOnClick={e=>{this.geo()}}/></span>
                     <Button goTo='/infopage' value='Enter Location' />
