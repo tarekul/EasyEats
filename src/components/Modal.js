@@ -13,13 +13,13 @@ export default props => {
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalCenterTitle">Votes Required</h5>
+                            <h5 className="modal-title" id="exampleModalCenterTitle">Votes Needed To Choose Restaurant</h5>
                             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                         <div className="modal-body">
-                        <input className="form-control" type="text" placeholder="2 votes or more" value={votes} onChange={handleOnChange('votes')}/>
+                        <input className="form-control" type="text" placeholder="2 votes minimum" value={votes} onChange={handleOnChange('votes')}/>
                         </div>
                         <div className="modal-footer">
                             <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
