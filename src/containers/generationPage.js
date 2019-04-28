@@ -71,21 +71,23 @@ class GenerationPage extends Component {
     getOptions = () => {
         axios({
             method: 'GET',
-            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=${this.state.lat}&longitude=${this.state.lon}&limit=50`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=fastfood&latitude=${this.state.lat}&longitude=${this.state.lon}&limit=50`,
             headers: {
                 Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
             }
         })
             .then(res => parseYelpData(res.data))
-            .then(restaurants => this.setState({ restaurants }, () => {
+            .then(restaurants => {
+                console.log(restaurants)
+                this.setState({ restaurants }, () => {
                 localStorage.setItem('ee_restList', JSON.stringify(restaurants));
                 this.generateRandomRestaurantList();
-            }));
+            })})
     }
     getOptions2 = (address) => {
         axios({
             method: 'GET',
-            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=restaurants&location=${address}&limit=50`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=fastfood&location=${address}&limit=50`,
             headers: {
                 Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
             }

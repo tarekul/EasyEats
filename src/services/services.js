@@ -23,9 +23,10 @@ const getList = (lat, lon) => {
 const parseYelpData = ( {businesses} ) => {
     return new Promise( (resolve, reject) => {
         if (!Array.isArray(businesses) || !businesses.length) return reject('Invalid data passed, Must be a yelp data response');
-        return resolve(
-            businesses.reduce( (acc, e, i) => {
-                const { name, alias,  display_phone, image_url, price, phone,} = e;
+        const obj = {}
+        const a = businesses.reduce( (acc, e, i) => {
+            const { name, alias,  display_phone, image_url, price, phone,} = e;
+            if(!obj[name]){
                 const categories = e.categories.reduce( (acc, e) => {
                     acc.push(e.title)
                     return acc;
@@ -39,9 +40,12 @@ const parseYelpData = ( {businesses} ) => {
                     price: price || null,
                     categories
                 })
-                 return acc;
-            }, [])
-        )
+                obj[name] = true
+            }
+            
+                return acc;
+        }, [])
+        return resolve(a)
     });
 };
 

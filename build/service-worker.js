@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.0/workbox-sw.js");
 
 importScripts(
-  "/EasyEats/precache-manifest.698bef7ca2b38e61c41b005064dc7baf.js"
+  "/EasyEats/precache-manifest.da4ead0a0d89d5af9f9726adc0145cfd.js"
 );
 
 self.addEventListener('message', (event) => {
