@@ -4,6 +4,7 @@ import { parseYelpData, selectRandom } from '../services/services';
 import axios from 'axios';
 import queryString from 'query-string';
 import firebase from '../services/firebase';
+console.log(firebase)
 
 class GenerationPage extends Component {
     constructor(props) {
@@ -87,19 +88,37 @@ class GenerationPage extends Component {
         }
     }
 
-    generatePoll() {
+    generatePoll = () => {
         const { display } = this.state;
-        const id = display.reduce( (acc, e, i) => {
+        const id = display.reduce((acc, e, i) => {
             const int = Math.floor(Math.random() * display[i].name.length)
-            acc += display[i].name[1]+display[i].name[0]+display[i].name[int]
+            acc += display[i].name[1] + display[i].name[0] + display[i].name[int]
             return acc;
         }, '').replace(/[^a-zA-Z0-9]/g, "ee")
-        console.log(id)
-        // const firebaseRef = firebase.database().ref();
-        // firebaseRef.child('')
+
+        const firebaseRef = firebase.database().ref('/polls');
+        firebaseRef.child(id).set({ data: display }, err => {
+            if (err) {
+                console.log('FAILED TO WRITE TO FIREBASE')
+                return;
+            } else {
+                this.props.history.push(`/poll/${id}`)
+            }
+        });
     };
 
-    pageLoad() {
+    checkData = (id) => {
+        const firebaseRef = firebase.database().ref('/polls/' + id);
+        firebaseRef.once('value')
+            .then(snapshot => {
+                console.log('snapshot: ', snapshot.val())
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    pageLoad = () => {
         const values = queryString.parse(this.props.location.search)
         if (!values.lat || !values.lon) {
             const temp = this.props.location.search.split('=')[1];
@@ -126,7 +145,7 @@ class GenerationPage extends Component {
         }
     }
 
-    pageReloaded() {
+    pageReloaded = () => {
         const restaurants = (localStorage.getItem('ee_restList')) ? JSON.parse(localStorage.getItem('ee_restList')) : null;
         if (!restaurants) {
             localStorage.setItem('ee_loc', JSON.stringify(null));
