@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import List from '../components/restList';
+import Modal from '../components/Modal';
 import { parseYelpData, selectRandom } from '../services/services';
 import axios from 'axios';
 import queryString from 'query-string';
@@ -15,11 +16,12 @@ class GenerationPage extends Component {
             restaurants: null,
             display: null,
             redirect: false,
+            votes: '',
 
         }
     }
 
-    handleClick = name => e => {
+    handleOnClick = name => e => {
         switch (name) {
             case 'regen':
                 this.generateRandomRestaurantList();
@@ -27,11 +29,39 @@ class GenerationPage extends Component {
             case 'create':
                 this.generatePoll();
                 break;
+            case 'modal':
+                const votes = this.state.votes.trim(); 
+                if(!votes.match(/[0-9]/g)) {
+                    this.setState({
+                        votes: '',
+                    })
+                    return;
+                };
+                const firstNum = votes.match(/[0-9]/g)[0];
+                if (parseInt(firstNum) < 2) {
+                    this.setState({
+                        votes: '',
+                    })
+                    return;
+                };
+                this.generatePoll(firstNum);
+                break;
 
             default:
                 return;
         }
+    };
 
+    specHandleOnClick = e => {
+    }
+
+    handleOnChange = name => e => {
+        switch (name) {
+            case 'votes':
+                this.setState({ [name]: e.target.value })
+            default:
+                return;
+        };
     };
 
     getOptions = () => {
@@ -87,7 +117,7 @@ class GenerationPage extends Component {
     }
 
     generatePoll = () => {
-        const { display } = this.state;
+        const { display, votes } = this.state;
         const id = display.reduce((acc, e, i) => {
             const int = Math.floor(Math.random() * display[i].name.length)
             acc += display[i].name[1] + display[i].name[0] + display[i].name[int]
@@ -95,7 +125,7 @@ class GenerationPage extends Component {
         }, '').replace(/[^a-zA-Z0-9]/g, "ee")
 
         const firebaseRef = firebase.database().ref('/polls');
-        firebaseRef.child(id).set({ data: display }, err => {
+        firebaseRef.child(id).set({ data: display, req_votes: votes, total_votes: [0,0,0,0]}, err => {
             if (err) {
                 console.log('FAILED TO WRITE TO FIREBASE')
                 return;
@@ -166,9 +196,9 @@ class GenerationPage extends Component {
         // const {lat , lon} = this.state
         this.pageLoad();
     }
-
+    
     render() {
-        const { display } = this.state
+        const { display, votes } = this.state
         return (
 
             <>
@@ -187,10 +217,11 @@ class GenerationPage extends Component {
                             }
                             <div className='container row my-1' >
                                 <div className='col-sm-12 my-1'>
-                                    <button type='button' className="btn btn-outline-info" onClick={this.handleClick('regen')} style={{ width: '100%' }} >Generate New List</button>
+                                    <button type='button' className="btn btn-outline-info" onClick={this.handleOnClick('regen')} style={{ width: '100%' }} >Generate New List</button>
                                 </div>
                                 <div className='col-sm-12 my-1'>
-                                    <button type='button' className="btn btn-outline-info" style={{ width: '100%' }} onClick={this.handleClick('create')} >Create Poll</button>
+                                    <Modal specHandleOnClick={this.specHandleOnClick} handleOnChange={this.handleOnChange} inputValue={votes} handleOnPollSubmit={this.handleOnClick} />
+                                    {/* <button type='button' className="btn btn-outline-info" style={{ width: '100%' }} onClick={this.handleClick('create')} >Create Poll</button> */}
                                 </div>
                             </div>
                         </div>
