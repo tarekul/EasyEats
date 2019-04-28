@@ -14,7 +14,9 @@ class PollPage extends Component {
         total_votes: null,
         voted_on: null,
         voted_value: null,
+        voted_restaurant: null,
         disabled: null,
+        maxVotes: false,
         copySuccess: '',
     }
 
@@ -31,8 +33,21 @@ class PollPage extends Component {
                     });
                 } else {
                     const ls = (localStorage.getItem('ee_' + id)) ? JSON.parse(localStorage.getItem('ee_' + id)) : null;
-                    const totalVotes = (data.total_votes)? data.total_votes.reduce( (acc, e, i) => {return acc+=e}, 0) : 0;
-                    if (ls ) {
+                    const totalVotes = (data.total_votes) ? data.total_votes.reduce((acc, e, i) => { return acc += e }, 0) : 0;
+                    if (totalVotes >= data.req_votes) {
+                        const voted_restaurant = this.findVoted(data.total_votes, data, data)
+                        this.setState({
+                            id,
+                            total_votes: data.total_votes,
+                            req_votes: data.req_votes,
+                            restaurants: data.data,
+                            voted_restaurant,
+                            disabled: true,
+                            maxVotes: true,
+                        })
+                        return;
+                    }
+                    if (ls) {
                         this.setState({
                             id,
                             restaurants: data.data,
@@ -56,6 +71,13 @@ class PollPage extends Component {
                 console.log(err)
             })
     }
+    findVoted = (votes, { data }) => {
+        let max = votes[0];
+        for (let i = 1; i < votes.length; i++) {
+            if (votes[i] > max) max = votes[i];
+        };
+        return data[max].name;
+    };
 
     copyToClipboard = (e) => {
         this.textArea.select();
@@ -75,6 +97,16 @@ class PollPage extends Component {
         } else {
             this.checkData(id);
         }
+
+        setTimeout(() => {
+            const firebaseListener = firebase.database().ref('/polls/' + id);
+            firebaseListener.on('value', (snapshot) => {
+                this.setState({
+                    total_votes: snapshot.val().total_votes,
+                })
+            })
+        }, 9000)
+
     }
 
     handleVote = () => {
@@ -131,8 +163,8 @@ class PollPage extends Component {
 
     render() {
 
-        const { id, redirect, restaurants, disabled, voted_on, total_votes } = this.state;
-        const totalVotes = (total_votes)? total_votes.reduce( (acc, e, i) => {return acc+=e}, 0) : 0;
+        const { id, redirect, restaurants, disabled, voted_on, req_votes, total_votes, maxVotes, voted_restaurant } = this.state;
+        const totalVotes = (total_votes) ? total_votes.reduce((acc, e, i) => { return acc += e }, 0) : 0;
         console.log(restaurants)
         return (
             <>
@@ -143,10 +175,10 @@ class PollPage extends Component {
                             <div className="container mx-0 col-12 ">
                                 <div className='row justify-content-md-center'>
                                     <div className='col-sm-12 col-md-6 row'>
-                                        <form className='col col-sm-1'
-                                            style={{ height: '0px', width: '0px', backgroundColor: 'grey' }}>
+                                        <form
+                                            style={{ height: '0px', width: '0px', backgroundColor: 'white' }}>
                                             <textarea
-                                                style={{ height: '0px', width: '0px', backgroundColor: 'grey' }}
+                                                style={{ height: '0px', width: '0px', backgroundColor: 'white' }}
                                                 ref={(textarea) => this.textArea = textarea}
                                                 value={'http://localhost:3000/#/poll/' + id}
                                                 readOnly={true}
@@ -159,10 +191,13 @@ class PollPage extends Component {
                                             <div className='col-sm-4'>
                                                 <button className='btn btn-outline-info col-sm-12' onClick={this.copyToClipboard}>Copy Url</button>
                                                 {this.state.copySuccess}
-                                            </div>       
+                                            </div>
                                         }
                                         <div className='col-sm-4'>
                                             <span className='h4'>Total Votes: {totalVotes} </span>
+                                        </div>
+                                        <div className='col-sm-4'>
+                                            <span className='h4'>Votes Needed: {req_votes - totalVotes} </span>
                                         </div>
                                     </div>
                                 </div>
@@ -172,24 +207,31 @@ class PollPage extends Component {
                                             return (
                                                 <div className='my-1 col-md-auto' key={i}>
                                                     {
+
                                                         (voted_on) ?
-                                                            <List {...e} poll={true} handleOnClick={this.handleOnClick} isChecked={(voted_on === e.name) ? true : false} isDisabled={disabled} />
+                                                            <List {...e} poll={true} handleOnClick={this.handleOnClick} isChecked={(voted_on === e.name) ? true : false} isDisabled={disabled} voteCount={total_votes[i]} />
                                                             :
-                                                            <List {...e} poll={true} handleOnClick={this.handleOnClick} isDisabled={disabled} />
+                                                            <List {...e} poll={true} handleOnClick={this.handleOnClick} isDisabled={disabled} voteCount={total_votes[i]} />
                                                     }
                                                 </div>
                                             )
                                         })
                                     }
                                     {
-                                        (voted_on) ?
+                                        (voted_on && !disabled && !maxVotes) ?
                                             <div className='container row my-1' >
                                                 <div className='col-sm-12 my-1'>
                                                     <button type='button' className="btn btn-outline-info" onClick={this.handleOnClick('vote')} style={{ width: '100%' }} >Vote</button>
                                                 </div>
                                             </div>
                                             :
-                                            <></>
+                                            (!maxVotes) ? <></>
+                                                :
+                                                <div className='container row my-1' >
+                                                    <div className='col-sm-12 my-1'>
+                                                        <button type='button' className="btn btn-danger" style={{ width: '100%' }} >Voting Is Complete: {voted_restaurant}</button>
+                                                    </div>
+                                                </div>
                                     }
                                 </div>
                             </div>
