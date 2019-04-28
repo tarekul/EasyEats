@@ -201,7 +201,7 @@ class PollPage extends Component {
                                             <textarea
                                                 style={{ height: '0px', width: '0px', backgroundColor: 'white' }}
                                                 ref={(textarea) => this.textArea = textarea}
-                                                value={'https://tarekul.github.io/EasyEats/' + id}
+                                                value={'https://tarekul.github.io/EasyEats/#/' + id}
                                                 readOnly={true}
                                             />
                                         </form>
