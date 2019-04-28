@@ -17,10 +17,17 @@ class PollPage extends Component {
             .then(snapshot => {
                 return snapshot.val()
             })
-            .then( ({ data }) => {
-                this.setState({
-                    restaurants: data,
-                });
+            .then((data) => {
+                if (!data) {
+                    this.setState({
+                        redirect: true,
+                    });
+                } else {
+                    this.setState({
+                        restaurants: data.data,
+                    });
+                }
+
             })
             .catch(err => {
                 console.log(err)
