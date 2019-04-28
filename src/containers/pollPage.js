@@ -65,12 +65,7 @@ class PollPage extends Component {
                                 }
                             </div>
                             :
-                            <div className='row'>
-                                <div className="col-sm-12 spinner-border" role="status">
-                                    <span className="sr-only">Loading...</span>
-                                </div>
-                            </div>
-
+                            <div className="d-flex justify-content-center mt-5 pt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>
                 }
             </>
         )

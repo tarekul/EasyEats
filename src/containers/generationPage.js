@@ -13,7 +13,7 @@ class GenerationPage extends Component {
             lat: null,
             lon: null,
             restaurants: null,
-            display: [],
+            display: null,
             redirect: false,
 
         }
@@ -173,26 +173,29 @@ class GenerationPage extends Component {
         return (
 
             <>
-                <div className='container'>
-                    {
-                        display.map((e, i) => {
-                            return (
-                                <div className='my-1' key={i}>
-                                    <List {...e} />
+                {
+                    (!display) ? (<div className="d-flex justify-content-center mt-5 pt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>)
+                        :
+                        <div className='container'>
+                            {
+                                display.map((e, i) => {
+                                    return (
+                                        <div className='my-1' key={i}>
+                                            <List {...e} />
+                                        </div>
+                                    )
+                                })
+                            }
+                            <div className='container row my-1' >
+                                <div className='col-sm-12 my-1'>
+                                    <button type='button' className="btn btn-outline-info" onClick={this.handleClick('regen')} style={{ width: '100%' }} >Generate New List</button>
                                 </div>
-                            )
-                        })
-                    }
-                    <div className='container row my-1' >
-                        <div className='col-sm-12 my-1'>
-                            <button type='button' className="btn btn-outline-info" onClick={this.handleClick('regen')} style={{ width: '100%' }} >Generate New List</button>
+                                <div className='col-sm-12 my-1'>
+                                    <button type='button' className="btn btn-outline-info" style={{ width: '100%' }} onClick={this.handleClick('create')} >Create Poll</button>
+                                </div>
+                            </div>
                         </div>
-                        <div className='col-sm-12 my-1'>
-                            <button type='button' className="btn btn-outline-info" style={{ width: '100%' }} onClick={this.handleClick('create')} >Create Poll</button>
-                        </div>
-                    </div>
-                </div>
-
+                }
             </>
         )
     }
