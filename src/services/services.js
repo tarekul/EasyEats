@@ -45,8 +45,30 @@ const parseYelpData = ( {businesses} ) => {
     });
 };
 
+const randomArray = (n, length, arr =[]) => {
+    if (arr.length === n) {
+        return arr;
+    };
+    const num = Math.floor(Math.random() * length);
+    if (arr.includes(num)) {
+        return randomArray(n, length, arr);
+    } else {
+        arr.push(num);
+        return randomArray(n, length, arr);
+    };
+};
+
+const selectRandom = (n, arr) => {
+    const randomNums = randomArray(n, arr.length);
+    return randomNums.reduce( (a, e) => {
+        a.push(arr[e])
+        return a;
+    }, []);
+ };
+
 export {
     get,
     getList,
-    parseYelpData
+    parseYelpData,
+    selectRandom,
 }
