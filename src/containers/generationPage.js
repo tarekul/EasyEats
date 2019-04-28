@@ -35,7 +35,7 @@ class GenerationPage extends Component {
     getOptions = () => {
         axios({
             method: 'GET',
-            url: `https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=${this.state.lat}&longitude=${this.state.lon}`,
+            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=${this.state.lat}&longitude=${this.state.lon}`,
             headers:{
                Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
            }
@@ -68,6 +68,15 @@ class GenerationPage extends Component {
                         })
                     }
                 </form>
+                <div className='container' style={{marginTop: '40px', marginLeft:'50px'}}  >
+                  <div>
+                <button type='button' class="btn btn-outline-info" >Generate New List</button>
+                </div>
+                <div style={{marginTop: '20px'}}  >
+                 <button type='button' class="btn btn-outline-info" >Create Poll</button>
+                </div>   
+                </div>
+               
             </>
         )
     }
