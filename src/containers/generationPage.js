@@ -68,6 +68,15 @@ class GenerationPage extends Component {
                         })
                     }
                 </form>
+                <div className='container' style={{marginTop: '40px', marginLeft:'50px'}}  >
+                  <div>
+                <button type='button' class="btn btn-outline-info" >Generate New List</button>
+                </div>
+                <div style={{marginTop: '20px'}}  >
+                 <button type='button' class="btn btn-outline-info" >Create Poll</button>
+                </div>   
+                </div>
+               
             </>
         )
     }
