@@ -17,10 +17,10 @@ const List = (props) => {
                     </li>
                     <li className="list-group-item">
                         <div className='row'>
-                            <div className='col col-sm-10'>
-                                {categories.map((e, i) => { return <span key={i} className='col h6'> {e} </span> })}
+                            <div className='col col-xs-10'>
+                                <span  className='col h6' style={{paddingLeft: '2px', paddingRight: '2px'}}> {categories.join(', ')} </span>
                             </div>
-                            <span className='col col-sm-2'>{price}</span>
+                            {(price)? <span className='col-sm-2'>{price}</span>: <span className='col-sm-2'>--</span>}
                         </div>
                     </li>
                 </div>
