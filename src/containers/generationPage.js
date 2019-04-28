@@ -5,6 +5,9 @@ import { parseYelpData, selectRandom } from '../services/services';
 import axios from 'axios';
 import queryString from 'query-string';
 import firebase from '../services/firebase';
+import logo from '../components/logo.jpg';
+import '../components/genpage.css';
+
 
 class GenerationPage extends Component {
     constructor(props) {
@@ -203,6 +206,9 @@ class GenerationPage extends Component {
         return (
 
             <>
+            <div className='image center'>
+                <img src={logo} alt='logo'/>
+            </div>
                 {
                     (!display) ? (<div className="d-flex justify-content-center mt-5 pt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>)
                         :
@@ -218,7 +224,7 @@ class GenerationPage extends Component {
                             }
                             <div className='container row my-1' >
                                 <div className='col-sm-12 my-1'>
-                                    <button type='button' className="btn btn-outline-info" onClick={this.handleOnClick('regen')} style={{ width: '100%' }} >Generate New List</button>
+                                    <button type='button' className="btn btn-outline-info" onClick={this.handleOnClick('regen')} style={{ width: '100%' }} >New Restaurants</button>
                                 </div>
                                 <div className='col-sm-12 my-1'>
                                     <Modal specHandleOnClick={this.specHandleOnClick} handleOnChange={this.handleOnChange} inputValue={votes} handleOnPollSubmit={this.handleOnClick} />
