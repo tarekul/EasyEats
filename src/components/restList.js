@@ -1,18 +1,19 @@
 import React from 'react';
+import './genpage.css';
 
 const List = (props) => {
     const { categories, image_url, menu_url, name, price, poll, isDisabled, handleOnClick, isChecked } = props;
     return (
         <>
             <div className='row container mx-0' >
-                <div className='col-sm-12 col-md-2'>
+                <div className='col-sm-12 col-md-2 restList_img'>
                     <img className='card-img' style={{ height: '100px', width: '100%', objectFit: 'cover' }} src={image_url} alt={name} />
                 </div>
-                <div className='card-header col' >
+                <div className='card-header col restList_box' >
                     <li className="list-group-item">
                         <div className='row justify-content-between'>
                             <span className='col h4'>{name}</span>
-                            <a href={menu_url} target='_blank' className='col-sm-2' rel="noopener noreferrer">Menu</a>
+                            <a href={menu_url} target='_blank' className='col-sm-2 button-red'rel="noopener noreferrer">Menu</a>
                         </div>
                     </li>
                     <li className="list-group-item">
