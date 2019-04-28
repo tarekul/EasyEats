@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import List from '../components/restList';
-import { parseYelpData } from '../services/services';
+import { parseYelpData, selectRandom } from '../services/services';
 import axios from 'axios';
 import queryString from 'query-string';
 
@@ -11,28 +11,12 @@ class GenerationPage extends Component {
         this.state = {
             lat:null,
             lon:null,
-            restaurants: [
-                {
-                    name: '',
-                    img_url: '',
-                    cuisine: [],
-                },
-                {
-                    name: '',
-                    img_url: '',
-                    cuisine: [],
-                },
-                {
-                    name: '',
-                    img_url: '',
-                    cuisine: [],
-                }
-            ],
+            restaurants: null,
+            display: [],
             redirect: false,
 
         }
     }
-
 
     getOptions = () => {
         axios({
@@ -43,7 +27,9 @@ class GenerationPage extends Component {
            }
         })
         .then(res =>  parseYelpData(res.data))
-        .then( restaurants => this.setState( { restaurants } ));
+        .then( restaurants => this.setState( { restaurants }, () => {
+            this.generateRandomRestaurantList();
+        }));
     }
     getOptions2 = (address) => {
         axios({
@@ -54,11 +40,27 @@ class GenerationPage extends Component {
            }
         })
         .then(res =>  parseYelpData(res.data))
-        .then( restaurants => this.setState( { restaurants } ));
+        .then( restaurants => this.setState( { restaurants }, () => {
+            this.generateRandomRestaurantList();
+        }));
+    }
+
+    generateRandomRestaurantList = () => {
+        const { restaurants } = this.state;
+        console.log('generating random: ', restaurants)
+        if (!restaurants) {
+            this.setState({redirect: true})
+            return;
+        };
+        const randomRestaurants = selectRandom(4 ,restaurants);
+        this.setState({
+            display: randomRestaurants,
+        })
     }
 
     componentDidMount(){
         // const {lat , lon} = this.state
+
         const values = queryString.parse(this.props.location.search)
         console.log('location',this.props.location.search)
         console.log('lat',values.lat)
@@ -69,6 +71,7 @@ class GenerationPage extends Component {
             // console.log('address: ', address)
             this.getOptions2(temp);
         } else if (values.lat && values.lon) {
+            
             this.setState({lat: values.lat, lon: values.lon},()=>{
                 this.getOptions()   
                })
@@ -78,20 +81,15 @@ class GenerationPage extends Component {
         }
     }
 
-    componentDidUpdate(p, ps) { 
-        console.log('previous: ', ps)
-        console.log("current: ", this.state)
-    }
-
-
     render() {
-        const { restaurants } = this.state
+        const { display } = this.state
+        console.log('Display: ', display)
         return (
 
             <>
                 <form>
                     {
-                        restaurants.map((e, i) => {
+                        display.map((e, i) => {
                             return <List img_url={e.img_url} restaurant={e.restaurant} cuisine={e.cuisine} />
                         })
                     }
