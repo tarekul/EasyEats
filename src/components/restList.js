@@ -7,7 +7,7 @@ const List = (props) => {
         <>
             <div className='row container mx-0' >
                 <div className='col-sm-12 col-md-2 restList_img'>
-                    <img className='card-img' style={{ height: '100px', width: '100%', objectFit: 'cover' }} src={image_url} alt={name} />
+                    <img className='card-img' style={{ height: '150px', width: '100%', objectFit: 'cover' }} src={image_url} alt={name} />
                 </div>
                 <div className='card-header col restList_box' >
                     <li className="list-group-item">

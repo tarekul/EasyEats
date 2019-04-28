@@ -35,7 +35,7 @@ class PollPage extends Component {
                     const ls = (localStorage.getItem('ee_' + id)) ? JSON.parse(localStorage.getItem('ee_' + id)) : null;
                     const totalVotes = (data.total_votes) ? data.total_votes.reduce((acc, e, i) => { return acc += e }, 0) : 0;
                     if (totalVotes >= data.req_votes) {
-                        const voted_restaurant = this.findVoted(data.total_votes, data, data)
+                        const voted_restaurant = this.findVoted(data.total_votes, data);
                         this.setState({
                             id,
                             total_votes: data.total_votes,
@@ -71,10 +71,25 @@ class PollPage extends Component {
                 console.log(err)
             })
     }
+
+    doVoted = () => {
+        // hackathon is almost over, doing this dirty
+        const { total_votes, restaurants } = this.state;
+        let max = 0;
+        for (let i = 1; i < total_votes.length; i++) {
+            if (total_votes[i - 1] < total_votes[i]) {
+                max = i;
+            }
+        };
+        return restaurants[max].name;
+    };
+
     findVoted = (votes, { data }) => {
-        let max = votes[0];
+        let max = 0;
         for (let i = 1; i < votes.length; i++) {
-            if (votes[i] > max) max = votes[i];
+            if (votes[i - 1] < votes[i]) {
+                max = i;
+            }
         };
         return data[max].name;
     };
@@ -98,14 +113,14 @@ class PollPage extends Component {
             this.checkData(id);
         }
 
-        setTimeout(() => {
-            const firebaseListener = firebase.database().ref('/polls/' + id);
-            firebaseListener.on('value', (snapshot) => {
-                this.setState({
-                    total_votes: snapshot.val().total_votes,
-                })
+        // setTimeout(() => {
+        this.firebaseListener = firebase.database().ref('/polls/' + id);
+        this.firebaseListener.on('value', (snapshot) => {
+            this.setState({
+                total_votes: snapshot.val().total_votes,
             })
-        }, 9000)
+        })
+        // }, 9000)
 
     }
 
@@ -116,7 +131,6 @@ class PollPage extends Component {
                 acc = i;
             return acc;
         }, '');
-        console.log(this.state)
         total_votes[index] = (total_votes[index] + 1);
         const newTotal_votes = total_votes;
         const firebaseRef = firebase.database().ref('/polls');
@@ -160,10 +174,14 @@ class PollPage extends Component {
         });
     };
 
+    componentWillMount() {
+        setTimeout(() => {
+            // this.firebaseListener.off()
+        }, 3000)
+    }
 
     render() {
-
-        const { id, redirect, restaurants, disabled, voted_on, req_votes, total_votes, maxVotes, voted_restaurant } = this.state;
+        const { id, redirect, restaurants, disabled, voted_on, req_votes, total_votes, maxVotes } = this.state;
         const totalVotes = (total_votes) ? total_votes.reduce((acc, e, i) => { return acc += e }, 0) : 0;
         return (
             <>
@@ -224,13 +242,14 @@ class PollPage extends Component {
                                                 </div>
                                             </div>
                                             :
-                                            (!maxVotes) ? <></>
-                                                :
+                                            (req_votes - totalVotes === 0) ?
                                                 <div className='container row my-1' >
                                                     <div className='col-sm-12 my-1'>
-                                                        <button type='button' className="btn btn-danger" style={{ width: '100%' }} >Voting Is Complete: {voted_restaurant}</button>
+                                                        <button type='button' className="btn btn-danger" style={{ width: '100%' }} >Voting Is Complete: {this.doVoted()}</button>
                                                     </div>
                                                 </div>
+                                                :
+                                                <></>
                                     }
                                 </div>
                             </div>
