@@ -59,7 +59,7 @@ class Home extends Component{
             <div className='container mt-5'>
             <div className ='row justify-content-md-center'>
             <div className='col-md-12 row justify-content-md-center'>
-                <img className='col col-md-auto' src={logo}/>
+                <img className='col col-md-auto' src={logo} alt='site logo'/>
             </div>
                 {/* <h2 style={{textAlign:'center'}}>EasyEats</h2> */}
                 <div className='col-md-12 row justify-content-md-center m-2'>
@@ -69,9 +69,6 @@ class Home extends Component{
                 {(!this.state) ? (<div className="d-flex justify-content-center mt-5 pt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>): <></>}
             </div>
             </div>
-            {/* <div>
-                <iframe src="https://giphy.com/embed/3oEjHLS6Va8qdALZCM" width="480" height="480" frameBorder="0" class="giphy-embed" allowFullScreen></iframe>
-            </div> */}
         </>
     }
 }
