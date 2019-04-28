@@ -4,7 +4,6 @@ import { parseYelpData, selectRandom } from '../services/services';
 import axios from 'axios';
 import queryString from 'query-string';
 import firebase from '../services/firebase';
-console.log(firebase)
 
 class GenerationPage extends Component {
     constructor(props) {
