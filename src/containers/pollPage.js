@@ -129,6 +129,7 @@ class PollPage extends Component {
 
 
     render() {
+
         const { id, redirect, restaurants, disabled, voted_on, total_votes } = this.state;
         const totalVotes = (total_votes)? total_votes.reduce( (acc, e, i) => {return acc+=e}, 0) : 0;
         console.log(restaurants)

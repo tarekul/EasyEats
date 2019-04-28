@@ -1,0 +1,1 @@
+{"version":3,"sources":["infoform.css"],"names":[],"mappings":"AAAA,cACI,aACJ,CACA,OACI,eACJ,CACA,OACI,eACJ,CACA,UACI,eACJ","file":"main.ff8feb79.chunk.css","sourcesContent":[".form-control{\n    color: #BFDBF7;\n}\n.col-5{\n    margin-left: 25%;\n}\n.image{\n    margin-left: 30%;\n}\n.btn-info{\n    margin-left: 40%;\n}"]}
