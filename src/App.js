@@ -6,6 +6,7 @@ import { Home, GenerationPage, InfoForm, PollPage } from './containers/'
 class App extends Component{
   render(){
     return <>
+    {/* <PollPage/> */}
       <Switch>
         <Route path='/' exact component={Home} />
         <Route path='/infopage' exact component={InfoForm} />
