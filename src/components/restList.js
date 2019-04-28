@@ -5,8 +5,8 @@ const List = (props) => {
     return (
         <>
             <div className='row container' >
-                <div className='col-2'>
-                    <img className='card-img' style={{ width: '100px' }} src={image_url} alt={name} />
+                <div className='col-sm-12 col-md-2'>
+                    <img className='card-img' style={{ height: '100px', width: '100%', objectFit: 'cover'}} src={image_url} alt={name} />
                 </div>
                 <div className='card-header col' >
                     <li className="list-group-item">{name}</li>
