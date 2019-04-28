@@ -132,7 +132,7 @@ class GenerationPage extends Component {
                 <form>
                     {
                         display.map((e, i) => {
-                            return <List img_url={e.img_url} restaurant={e.restaurant} cuisine={e.cuisine} />
+                            return <List {...e} key={i}/>
                         })
                     }
                 </form>
