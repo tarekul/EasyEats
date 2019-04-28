@@ -1,6 +1,8 @@
 import React from 'react';
 import '../components/infoform.css'
 import logo from '../components/logo.jpg';
+import Sky from 'react-sky';
+
 
 
 class InfoForm extends React.Component{
@@ -29,8 +31,23 @@ class InfoForm extends React.Component{
         const {states}=this.state
         return (
             <>
+                    <Sky 
+          images={{
+      
+                0: "https://image.flaticon.com/icons/svg/1076/1076323.svg",
+                1: "https://image.flaticon.com/icons/svg/1585/1585289.svg",
+                2: "https://image.flaticon.com/icons/svg/1594/1594208.svg",
+
+                
+                
+          }}
+          how={130} 
+          time={25} 
+          size={'90px'}
+          background={'white'}
+        />
             <form>
-             <div className='image'>
+             <div className='image'  >
                 <img src={logo} alt='logo'/>
             </div>
             <div className = 'col-5 '>
