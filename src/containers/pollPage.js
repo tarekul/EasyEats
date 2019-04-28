@@ -31,7 +31,8 @@ class PollPage extends Component {
                     });
                 } else {
                     const ls = (localStorage.getItem('ee_' + id)) ? JSON.parse(localStorage.getItem('ee_' + id)) : null;
-                    if (ls) {
+                    const totalVotes = (data.total_votes)? data.total_votes.reduce( (acc, e, i) => {return acc+=e}, 0) : 0;
+                    if (ls ) {
                         this.setState({
                             id,
                             restaurants: data.data,
