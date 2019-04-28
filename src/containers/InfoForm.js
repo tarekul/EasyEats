@@ -31,12 +31,12 @@ class InfoForm extends React.Component{
             <>
             <form>
              <div className='image'>
-                <img src={logo}/>
+                <img src={logo} alt='logo'/>
             </div>
             <div className = 'col-5 '>
             <div className="form-group">
                 <label for="inputAddress">Address</label>
-                <input type="text"  onChange={e=>this.handleInputChange(e)} name="address" className="form-control" id="validationCustom01" id="inputAddress" placeholder="1234 Main St" />
+                <input type="text" onChange={e=>this.handleInputChange(e)} name="address" className="form-control" id="validationCustom01" placeholder="1234 Main St" />
             </div>
             <div className="form-row">
                 <div className="form-group col-md-6">
@@ -45,7 +45,7 @@ class InfoForm extends React.Component{
                 </div>
                 <div className="form-group col-md-4">
                 <label for="inputState">State</label>
-                <select onChange={this.handleChange} id="inputState" onChange={e=>this.handleInputChange(e)} name="state" class="form-control">
+                <select id="inputState" onChange={e=>this.handleInputChange(e)} name="state" class="form-control">
                     <option selected>Choose...</option>
                     {
                         states.map((e,i)=>{
