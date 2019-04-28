@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import List from '../components/restList'
 import { Redirect } from 'react-router-dom'
 import firebase from '../services/firebase';
+import logo from '../components/logo.jpg'
 
 
 class PollPage extends Component {
@@ -185,6 +186,9 @@ class PollPage extends Component {
         const totalVotes = (total_votes) ? total_votes.reduce((acc, e, i) => { return acc += e }, 0) : 0;
         return (
             <>
+            <div className='image center'>
+                <img src={logo} alt='logo'/>
+            </div>
                 {
                     (redirect) ? <Redirect to='/' />
                         :
