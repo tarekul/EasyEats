@@ -56,7 +56,7 @@ class Home extends Component{
           background={'teal'}
         />
 
-            <div className='container mt-5 jumbotron' >
+            <div className='container mt-5 jumbotron'>
             <div className='image'>
                 <img src={logo}/>
             </div>

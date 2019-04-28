@@ -65,7 +65,7 @@ class PollPage extends Component {
         console.log(this.state)
     }
     render() {
-        const { id, redirect, restaurants, req_votes } = this.state;
+        const { id, redirect, restaurants } = this.state;
         return (
             <>
                 {
