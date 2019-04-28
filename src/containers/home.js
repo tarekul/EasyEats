@@ -3,12 +3,20 @@ import Button from '../components/Button'
 
 
 class Home extends Component{
-    // state = {
-    //     latitude:null,
-    //     longitude:null
-    // }
+    state = {
+        loading: null,
+    }
 
     geo = () =>{
+        this.setState({
+            loading: true,
+        }, () => {
+            setTimeout( () => {
+                this.setState({
+                    loading: false,
+                })
+            }, 1500);
+        });
        if(navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -38,9 +46,7 @@ class Home extends Component{
                     <span style={{marginRight:'1%'}}><Button goTo='/' value='My Location' handleOnClick={e=>{this.geo()}}/></span>
                     <Button goTo='/infopage' value='Enter Location' />
                 </div>
-                
-            
-               
+                {(!this.state) ? (<div className="d-flex justify-content-center mt-5 pt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>): <></>}
             </div>
         </>
     }

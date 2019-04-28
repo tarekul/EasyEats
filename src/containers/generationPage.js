@@ -1,82 +1,231 @@
 import React, { Component } from 'react';
 import List from '../components/restList';
+import Modal from '../components/Modal';
+import { parseYelpData, selectRandom } from '../services/services';
 import axios from 'axios';
 import queryString from 'query-string';
+import firebase from '../services/firebase';
 
 class GenerationPage extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            lat:null,
-            lon:null,
-            restaurant: [
-                {
-                    name: '',
-                    img_url: '',
-                    cuisine: [],
-                },
-                {
-                    name: '',
-                    img_url: '',
-                    cuisine: [],
-                },
-                {
-                    name: '',
-                    img_url: '',
-                    cuisine: [],
-                }
-            ]
+            lat: null,
+            lon: null,
+            restaurants: null,
+            display: null,
+            redirect: false,
+            votes: '',
 
         }
     }
 
+    handleOnClick = name => e => {
+        switch (name) {
+            case 'regen':
+                this.generateRandomRestaurantList();
+                break;
+            case 'create':
+                this.generatePoll();
+                break;
+            case 'modal':
+                const votes = this.state.votes.trim(); 
+                if(!votes.match(/[0-9]/g)) {
+                    this.setState({
+                        votes: '',
+                    })
+                    return;
+                };
+                const firstNum = votes.match(/[0-9]/g)[0];
+                if (parseInt(firstNum) < 2) {
+                    this.setState({
+                        votes: '',
+                    })
+                    return;
+                };
+                this.generatePoll(firstNum);
+                break;
+
+            default:
+                return;
+        }
+    };
+
+    specHandleOnClick = e => {
+    }
+
+    handleOnChange = name => e => {
+        switch (name) {
+            case 'votes':
+                this.setState({ [name]: e.target.value })
+            default:
+                return;
+        };
+    };
 
     getOptions = () => {
         axios({
             method: 'GET',
-            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=${this.state.lat}&longitude=${this.state.lon}`,
-            headers:{
-               Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
-           }
+            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=restaurants&latitude=${this.state.lat}&longitude=${this.state.lon}&limit=50`,
+            headers: {
+                Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
+            }
         })
-        .then(res => console.log('res', res.data))
+            .then(res => parseYelpData(res.data))
+            .then(restaurants => this.setState({ restaurants }, () => {
+                localStorage.setItem('ee_restList', JSON.stringify(restaurants));
+                this.generateRandomRestaurantList();
+            }));
+    }
+    getOptions2 = (address) => {
+        axios({
+            method: 'GET',
+            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=restaurants&location=${address}&limit=50`,
+            headers: {
+                Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
+            }
+        })
+            .then(res => parseYelpData(res.data))
+            .then(restaurants => this.setState({ restaurants }, () => {
+                localStorage.setItem('ee_restList', JSON.stringify(restaurants));
+                this.generateRandomRestaurantList();
+            }));
     }
 
-    componentDidMount(){
-        const {lat , lon} = this.state
-        console.log('location',this.props.location.search)
+    generateRandomRestaurantList = (passedIn = null) => {
+        const restaurants = passedIn || this.state.restaurants;
+        if (!restaurants) {
+            this.setState({ redirect: true })
+            return;
+        };
+        const randomRestaurants = selectRandom(4, restaurants);
+        if (passedIn) {
+            this.setState({
+                restaurants: passedIn,
+                display: randomRestaurants,
+            }, () => {
+                localStorage.setItem('ee_restDisplayList', JSON.stringify(randomRestaurants));
+            })
+        } else {
+            this.setState({
+                display: randomRestaurants,
+            }, () => {
+                localStorage.setItem('ee_restDisplayList', JSON.stringify(randomRestaurants));
+            })
+        }
+    }
+
+    generatePoll = () => {
+        const { display, votes } = this.state;
+        const id = display.reduce((acc, e, i) => {
+            const int = Math.floor(Math.random() * display[i].name.length)
+            acc += display[i].name[1] + display[i].name[0] + display[i].name[int]
+            return acc;
+        }, '').replace(/[^a-zA-Z0-9]/g, "ee")
+
+        const firebaseRef = firebase.database().ref('/polls');
+        firebaseRef.child(id).set({ data: display, req_votes: votes, total_votes: [0,0,0,0]}, err => {
+            if (err) {
+                console.log('FAILED TO WRITE TO FIREBASE')
+                return;
+            } else {
+                this.props.history.push(`/poll/${id}`)
+            }
+        });
+    };
+
+    checkData = (id) => {
+        const firebaseRef = firebase.database().ref('/polls/' + id);
+        firebaseRef.once('value')
+            .then(snapshot => {
+                console.log('snapshot: ', snapshot.val())
+            })
+            .catch(err => {
+                console.log(err)
+            })
+    }
+
+    pageLoad = () => {
         const values = queryString.parse(this.props.location.search)
-        console.log('lat',values.lat)
-        console.log('lon',values.lon)
-        this.setState({lat: values.lat, lon: values.lon},()=>{
-         this.getOptions()   
-        })
-        
+        if (!values.lat || !values.lon) {
+            const temp = this.props.location.search.split('=')[1];
+            const ls = (localStorage.getItem('ee_loc')) ? JSON.parse(localStorage.getItem('ee_loc')) : null;
+            if (ls) {
+                if (ls === temp) return this.pageReloaded();
+            }
+            const store = { loc: temp };
+            localStorage.setItem('ee_loc', JSON.stringify(store));
+            this.getOptions2(temp);
+        } else if (values.lat && values.lon) {
+            const ls = (localStorage.getItem('ee_latlon')) ? JSON.parse(localStorage.getItem('ee_latlon')) : null;
+            if (ls) {
+                if (values.lat === ls.lat && values.lon === ls.lon) return this.pageReloaded();
+            }
+            const store = { lat: values.lat, lon: values.lon };
+            localStorage.setItem('ee_latlon', JSON.stringify(store));
+            this.setState({ lat: values.lat, lon: values.lon }, () => {
+                this.getOptions()
+            })
+        } else {
+            this.setState({ redirect: true })
+            return;
+        }
     }
 
+    pageReloaded = () => {
+        const restaurants = (localStorage.getItem('ee_restList')) ? JSON.parse(localStorage.getItem('ee_restList')) : null;
+        if (!restaurants) {
+            localStorage.setItem('ee_loc', JSON.stringify(null));
+            localStorage.setItem('ee_latlon', JSON.stringify(null));
+            this.pageLoad();
+            return;
+        }
+        const display = (localStorage.getItem('ee_restDisplayList')) ? JSON.parse(localStorage.getItem('ee_restDisplayList')) : null;
+        if (!display) {
+            this.generateRandomRestaurantList(restaurants);
+            return;
+        }
+        this.setState({
+            restaurants,
+            display,
+        });
+    }
 
+    componentDidMount() {
+        // const {lat , lon} = this.state
+        this.pageLoad();
+    }
+    
     render() {
-        const { restaurant } = this.state
+        const { display, votes } = this.state
         return (
 
             <>
-                <form>
-                    {
-                        restaurant.map((e, i) => {
-                            return <List img_url={e.img_url} restaurant={e.restaurant} cuisine={e.cuisine} />
-                        })
-                    }
-                </form>
-                <div className='container' style={{marginTop: '40px', marginLeft:'50px'}}  >
-                  <div>
-                <button type='button' class="btn btn-outline-info" >Generate New List</button>
-                </div>
-                <div style={{marginTop: '20px'}}  >
-                 <button type='button' class="btn btn-outline-info" >Create Poll</button>
-                </div>   
-                </div>
-               
+                {
+                    (!display) ? (<div className="d-flex justify-content-center mt-5 pt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>)
+                        :
+                        <div className='container'>
+                            {
+                                display.map((e, i) => {
+                                    return (
+                                        <div className='my-1' key={i}>
+                                            <List {...e} />
+                                        </div>
+                                    )
+                                })
+                            }
+                            <div className='container row my-1' >
+                                <div className='col-sm-12 my-1'>
+                                    <button type='button' className="btn btn-outline-info" onClick={this.handleOnClick('regen')} style={{ width: '100%' }} >Generate New List</button>
+                                </div>
+                                <div className='col-sm-12 my-1'>
+                                    <Modal specHandleOnClick={this.specHandleOnClick} handleOnChange={this.handleOnChange} inputValue={votes} handleOnPollSubmit={this.handleOnClick} />
+                                    {/* <button type='button' className="btn btn-outline-info" style={{ width: '100%' }} onClick={this.handleClick('create')} >Create Poll</button> */}
+                                </div>
+                            </div>
+                        </div>
+                }
             </>
         )
     }
