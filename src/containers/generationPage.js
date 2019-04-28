@@ -20,7 +20,6 @@ class GenerationPage extends Component {
     }
 
     handleClick = name => e => {
-        console.log('here')
         switch (name) {
             case 'regen':
                 this.generateRandomRestaurantList();
