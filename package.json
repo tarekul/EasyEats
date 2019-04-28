@@ -2,7 +2,7 @@
   "name": "easyeats",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://tarekul.github.io/EasyEats",
+  "homepage": "https://tarekul.github.io/EasyEats/",
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
