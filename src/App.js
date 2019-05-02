@@ -6,11 +6,12 @@ import { Home, GenerationPage, InfoForm, PollPage } from './containers/'
 class App extends Component{
   render(){
     return <>
+    {/* <PollPage/> */}
       <Switch>
         <Route path='/' exact component={Home} />
         <Route path='/infopage' exact component={InfoForm} />
         <Route path='/genpoll' component={GenerationPage} />
-        <Route path='/poll' component={PollPage} />
+        <Route path='/poll/:id' component={PollPage} />
       </Switch>
     </>
   }
