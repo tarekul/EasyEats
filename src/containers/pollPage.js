@@ -115,7 +115,6 @@ class PollPage extends Component {
                 this.checkData(id);
             }, 1500)
         }
-
         setTimeout(() => {
             this.firebaseListener = firebase.database().ref('/polls/' + id);
             this.firebaseListener.on('value', (snapshot) => {
@@ -124,7 +123,6 @@ class PollPage extends Component {
                 })
             })
         }, 1500)
-
     }
 
     handleVote = () => {
