@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import List from '../components/restList';
 import Modal from '../components/Modal';
-import { parseYelpData, selectRandom } from '../services/services';
+import { selectRandom } from '../services/services';
 import axios from 'axios';
 import queryString from 'query-string';
 import firebase from '../services/firebase';
@@ -68,37 +68,21 @@ class GenerationPage extends Component {
         };
     };
 
-    getOptions = () => {
+    getRestaurantsByGeo = () => {
         axios({
             method: 'GET',
-            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=fastfood&latitude=${this.state.lat}&longitude=${this.state.lon}&limit=50`,
-            headers: {
-                Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
-            }
+            url: `http://localhost:5767/restaurants/geo/?lat=${this.state.lat}&lon=${this.state.lon}`,
         })
-            .then(res => parseYelpData(res.data))
-            .then(restaurants => {
-                console.log(restaurants)
-                this.setState({ restaurants }, () => {
-                    localStorage.setItem('ee_restList', JSON.stringify(restaurants));
-                    this.generateRandomRestaurantList();
-                })
+            .then(({ data: restaurants }) => restaurants)
+            .then(({ restaurants }) => {
+                this.setState({ restaurants })
+                return restaurants;
             })
-    }
-    // getOptions2 = (address) => {
-    //     axios({
-    //         method: 'GET',
-    //         url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=fastfood&location=${address}&limit=50`,
-    //         headers: {
-    //             Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
-    //         }
-    //     })
-    //         .then(res => parseYelpData(res.data))
-    //         .then(restaurants => this.setState({ restaurants }, () => {
-    //             localStorage.setItem('ee_restList', JSON.stringify(restaurants));
-    //             this.generateRandomRestaurantList();
-    //         }));
-    // }
+            .then( (restaurants) => {
+                localStorage.setItem('ee_restList', JSON.stringify(restaurants));
+                this.generateRandomRestaurantList();
+            });
+    };
 
     getRestaurantsByAddress = (address) => {
         axios({
@@ -106,11 +90,15 @@ class GenerationPage extends Component {
             url: `http://localhost:5767/restaurants/location/?address=${address}`,
         })
             .then(({ data: restaurants }) => restaurants)
-            .then(({ restaurants }) => this.setState({ restaurants }, (restaurants) => {
+            .then(({ restaurants }) => {
+                this.setState({ restaurants })
+                return restaurants;
+            })
+            .then( (restaurants) => {
                 localStorage.setItem('ee_restList', JSON.stringify(restaurants));
                 this.generateRandomRestaurantList();
-            }));
-    }
+            });
+    };
 
     generateRandomRestaurantList = (passedIn = null) => {
         const restaurants = passedIn || this.state.restaurants;
@@ -184,7 +172,7 @@ class GenerationPage extends Component {
             const store = { lat: values.lat, lon: values.lon };
             localStorage.setItem('ee_latlon', JSON.stringify(store));
             this.setState({ lat: values.lat, lon: values.lon }, () => {
-                this.getOptions()
+                this.getRestaurantsByGeo()
             })
         } else {
             this.setState({ redirect: true })
