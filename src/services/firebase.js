@@ -7,7 +7,7 @@ const getConfig = (async function (){
     method: 'GET',
     url: `https://eze-api.herokuapp.com/fb/`,
     headers: {
-      tkn: '',
+      tkn: 8850,
     }})
   return () => {
     return {
