@@ -111,17 +111,19 @@ class PollPage extends Component {
                 redirect: true,
             })
         } else {
-            this.checkData(id);
+            setTimeout(() => {
+                this.checkData(id);
+            }, 1500)
         }
 
-        // setTimeout(() => {
-        this.firebaseListener = firebase.database().ref('/polls/' + id);
-        this.firebaseListener.on('value', (snapshot) => {
-            this.setState({
-                total_votes: snapshot.val().total_votes,
+        setTimeout(() => {
+            this.firebaseListener = firebase.database().ref('/polls/' + id);
+            this.firebaseListener.on('value', (snapshot) => {
+                this.setState({
+                    total_votes: snapshot.val().total_votes,
+                })
             })
-        })
-        // }, 9000)
+        }, 1500)
 
     }
 
@@ -174,11 +176,8 @@ class PollPage extends Component {
             [name]: e.target.value,
         });
     };
-
-    componentWillMount() {
-        setTimeout(() => {
-            // this.firebaseListener.off()
-        }, 3000)
+    componentWillUnmount() {
+        this.firebaseListener.off();
     }
 
     render() {
@@ -186,9 +185,9 @@ class PollPage extends Component {
         const totalVotes = (total_votes) ? total_votes.reduce((acc, e, i) => { return acc += e }, 0) : 0;
         return (
             <>
-            <div className='image center'>
-                <img src={logo} alt='logo'/>
-            </div>
+                <div className='image center'>
+                    <img src={logo} alt='logo' />
+                </div>
                 {
                     (redirect) ? <Redirect to='/' />
                         :
