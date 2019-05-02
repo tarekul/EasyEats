@@ -71,7 +71,8 @@ class GenerationPage extends Component {
     getRestaurantsByGeo = () => {
         axios({
             method: 'GET',
-            url: `http://localhost:5767/restaurants/geo/?lat=${this.state.lat}&lon=${this.state.lon}`,
+            url: `https://eze-api.herokuapp.com/restaurants/geo/?lat=${this.state.lat}&lon=${this.state.lon}`,
+            Origin: 'Easy Eats Front End'
         })
             .then(({ data: restaurants }) => restaurants)
             .then(({ restaurants }) => {
@@ -87,7 +88,8 @@ class GenerationPage extends Component {
     getRestaurantsByAddress = (address) => {
         axios({
             method: 'GET',
-            url: `http://localhost:5767/restaurants/location/?address=${address}`,
+            url: `https://eze-api.herokuapp.com/restaurants/location/?address=${address}`,
+            Origin: 'Easy Eats Front End'
         })
             .then(({ data: restaurants }) => restaurants)
             .then(({ restaurants }) => {
