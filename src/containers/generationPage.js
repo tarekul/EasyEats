@@ -33,8 +33,8 @@ class GenerationPage extends Component {
                 this.generatePoll();
                 break;
             case 'modal':
-                const votes = this.state.votes.trim(); 
-                if(!votes.match(/[0-9]/g)) {
+                const votes = this.state.votes.trim();
+                if (!votes.match(/[0-9]/g)) {
                     this.setState({
                         votes: '',
                     })
@@ -80,20 +80,33 @@ class GenerationPage extends Component {
             .then(restaurants => {
                 console.log(restaurants)
                 this.setState({ restaurants }, () => {
-                localStorage.setItem('ee_restList', JSON.stringify(restaurants));
-                this.generateRandomRestaurantList();
-            })})
+                    localStorage.setItem('ee_restList', JSON.stringify(restaurants));
+                    this.generateRandomRestaurantList();
+                })
+            })
     }
-    getOptions2 = (address) => {
+    // getOptions2 = (address) => {
+    //     axios({
+    //         method: 'GET',
+    //         url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=fastfood&location=${address}&limit=50`,
+    //         headers: {
+    //             Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
+    //         }
+    //     })
+    //         .then(res => parseYelpData(res.data))
+    //         .then(restaurants => this.setState({ restaurants }, () => {
+    //             localStorage.setItem('ee_restList', JSON.stringify(restaurants));
+    //             this.generateRandomRestaurantList();
+    //         }));
+    // }
+
+    getRestaurantsByAddress = (address) => {
         axios({
             method: 'GET',
-            url: `${'https://cors-anywhere.herokuapp.com/'}https://api.yelp.com/v3/businesses/search?term=fastfood&location=${address}&limit=50`,
-            headers: {
-                Authorization: 'BEARER 7qhXzmc-qBs_nON-yV8qSFRDQOJkB9e5UYMVuyik8ySqoilGOlVAvGE7F31YxftS2nEMUkugJUlS7PyM-D0nnUuaxq3BOKUVH0aHZipZHx48RP-X31AVCYz1bX7EXHYx'
-            }
+            url: `http://localhost:5767/restaurants/location/?address=${address}`,
         })
-            .then(res => parseYelpData(res.data))
-            .then(restaurants => this.setState({ restaurants }, () => {
+            .then(({ data: restaurants }) => restaurants)
+            .then(({ restaurants }) => this.setState({ restaurants }, (restaurants) => {
                 localStorage.setItem('ee_restList', JSON.stringify(restaurants));
                 this.generateRandomRestaurantList();
             }));
@@ -131,7 +144,7 @@ class GenerationPage extends Component {
         }, '').replace(/[^a-zA-Z0-9]/g, "ee")
 
         const firebaseRef = firebase.database().ref('/polls');
-        firebaseRef.child(id).set({ data: display, req_votes: votes, total_votes: [0,0,0,0]}, err => {
+        firebaseRef.child(id).set({ data: display, req_votes: votes, total_votes: [0, 0, 0, 0] }, err => {
             if (err) {
                 console.log('FAILED TO WRITE TO FIREBASE')
                 return;
@@ -162,7 +175,7 @@ class GenerationPage extends Component {
             }
             const store = { loc: temp };
             localStorage.setItem('ee_loc', JSON.stringify(store));
-            this.getOptions2(temp);
+            this.getRestaurantsByAddress(temp);
         } else if (values.lat && values.lon) {
             const ls = (localStorage.getItem('ee_latlon')) ? JSON.parse(localStorage.getItem('ee_latlon')) : null;
             if (ls) {
@@ -202,15 +215,15 @@ class GenerationPage extends Component {
         // const {lat , lon} = this.state
         this.pageLoad();
     }
-    
+
     render() {
         const { display, votes } = this.state
         return (
 
             <>
-            <div className='image center'>
-                <img src={logo} alt='logo'/>
-            </div>
+                <div className='image center'>
+                    <img src={logo} alt='logo' />
+                </div>
                 {
                     (!display) ? (<div className="d-flex justify-content-center mt-5 pt-5"><div className="spinner-border" role="status"><span className="sr-only">Loading...</span></div></div>)
                         :
