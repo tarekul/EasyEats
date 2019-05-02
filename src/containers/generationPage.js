@@ -8,7 +8,6 @@ import firebase from '../services/firebase';
 import logo from '../components/logo.jpg';
 import '../components/genpage.css';
 
-
 class GenerationPage extends Component {
     constructor(props) {
         super(props)
