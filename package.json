@@ -2,13 +2,11 @@
   "name": "easyeats",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://tarekul.github.io/EasyEats/",
   "dependencies": {
     "axios": "^0.18.0",
     "bootstrap": "^4.3.1",
     "cors": "^2.8.5",
     "firebase": "^5.10.1",
-    "gh-pages": "^2.0.1",
     "jquery": "^3.4.0",
     "popper.js": "^1.15.0",
     "query-string": "^6.4.2",
